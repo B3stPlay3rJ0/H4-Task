@@ -14,7 +14,6 @@
 
         // Firebase configuration
         const firebaseConfig = {
-
             apiKey: "AIzaSyCdDCf3Nsz42WGJNRr0DGFEaiqop2mevrU",
             authDomain: "h4task.firebaseapp.com",
             projectId: "h4task",
@@ -22,9 +21,7 @@
             messagingSenderId: "105748029355",
             appId: "1:105748029355:web:3a0cc7709ad3d80ffd7cee",
             measurementId: "G-9KC6RP92BD"
-
         };
-
 
         // Initialize Firebase
         const app = initializeApp(firebaseConfig);
@@ -36,9 +33,63 @@
         const passwordInput = document.getElementById("password");
         const submitButton = document.getElementById("submit");
 
+        // --- VALIDATION FUNCTION ---
+        function validateForm(firstName, lastName, email, password, role) {
+            // Trim inputs
+            firstName = firstName.trim();
+            lastName = lastName.trim();
+            email = email.trim();
+            password = password.trim();
+
+            // 1. First name cannot be empty
+            if (firstName.length === 0) {
+                console.error("❌ Validation Error: First name cannot be empty.");
+                return false;
+            }
+
+            // 2. Last name must not contain whitespace
+            if (/\s/.test(lastName)) {
+                console.error("❌ Validation Error: Last name cannot contain spaces.");
+                return false;
+            }
+
+            // 3. Email must be valid (basic regex)
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (!emailRegex.test(email)) {
+                console.error("❌ Validation Error: Invalid email format.");
+                return false;
+            }
+
+            // 4. No whitespace in email
+            if (/\s/.test(email)) {
+                console.error("❌ Validation Error: Email cannot contain whitespace.");
+                return false;
+            }
+
+            // 5. Password must be >= 10 chars and no spaces
+            if (password.length < 10) {
+                console.error("❌ Validation Error: Password must be at least 10 characters long.");
+                return false;
+            }
+
+            if (/\s/.test(password)) {
+                console.error("❌ Validation Error: Password cannot contain whitespace.");
+                return false;
+            }
+
+            // 6. Role must be student or teacher
+            if (role !== "student" && role !== "teacher") {
+                console.error("❌ Validation Error: Invalid role selected.");
+                return false;
+            }
+
+            console.log("✅ Validation Passed!");
+            return true;
+        }
+
         // Handle form submission
         submitButton.addEventListener('click', (event) => {
-            event.preventDefault(); // Prevent form submission from reloading the page
+            event.preventDefault(); // Prevent form reload
 
             const email = emailInput.value;
             const password = passwordInput.value;
@@ -46,20 +97,24 @@
             const lastName = document.getElementById("lastName").value;
             const role = document.getElementById("role").value;
 
-
-            console.log("Form submitted. Email: ", email, " Password: ", password); // Debugging log
+            // Run validation
+            const isValid = validateForm(firstName, lastName, email, password, role);
+            if (!isValid) {
+                console.warn("Form submission blocked due to validation error.");
+                return; // Stop here if validation fails
+            }
 
             // Create user using Firebase Authentication
             createUserWithEmailAndPassword(auth, email, password)
                 .then((userCredential) => {
                     const user = userCredential.user;
-                    console.log("User created successfully:", user); // Debugging log
+                    console.log("✅ User created successfully:", user.email);
 
                     const userData = {
                         email: email,
                         password: password,
-                        firstName: firstName,
-                        lastName: lastName,
+                        firstName: firstName.trim(),
+                        lastName: lastName.trim(),
                         role: role,
                     };
 
@@ -67,21 +122,18 @@
                     const docRef = doc(db, "users", user.uid);
                     setDoc(docRef, userData)
                         .then(() => {
-                            console.log("Document successfully written!"); // Debugging log
-                            window.location.href = 'placeholderHomepage.html'; // Redirect after successful signup
+                            console.log("✅ Document successfully written!");
+                            window.location.href = 'placeholderHomepage.html';
                         })
                         .catch((error) => {
-                            console.error("Error writing document:", error);
+                            console.error("🔥 Error writing document:", error);
                         });
                 })
                 .catch((error) => {
-                    const errorCode = error.code;
-                    const errorMessage = error.message;
-                    console.error("Error creating user:", errorCode, errorMessage); // Debugging log
+                    console.error("🔥 Error creating user:", error.code, error.message);
                 });
         });
     </script>
-
 </head>
 
 <body>
@@ -105,12 +157,10 @@
             <option value="student">Student</option>
             <option value="teacher">Teacher</option>
         </select><br>
-
     </form>
+
     <button type="submit" id="submit">Submit</button> <br>
-    <button id="delete">Delete Account</button> <br> <!-- Button to delete user account -->
+    <button id="delete">Delete Account</button> <br>
     <button id="logIn">Login</button>
-
 </body>
-
 </html>
