@@ -33,7 +33,9 @@
         const submitButton = document.getElementById("submit");
 
         // --- VALIDATION FUNCTION ---
-        function validateForm(firstName, lastName, email, password, role) {
+
+        function validateForm(firstName, lastName, email, password) {
+
             // Trim inputs
             firstName = firstName.trim();
             lastName = lastName.trim();
@@ -76,12 +78,6 @@
                 return false;
             }
 
-            // 6. Role must be student or teacher
-            if (role !== "student" && role !== "teacher") {
-                console.error("❌ Validation Error: Invalid role selected.");
-                return false;
-            }
-
             console.log("✅ Validation Passed!");
             return true;
         }
@@ -90,14 +86,13 @@
         submitButton.addEventListener('click', (event) => {
             event.preventDefault(); // Prevent form reload
 
-            const email = emailInput.value;
+            const email = emailInput.value.trim();
             const password = passwordInput.value;
             const firstName = document.getElementById("firstName").value;
             const lastName = document.getElementById("lastName").value;
-            const role = document.getElementById("role").value;
 
             // Run validation
-            const isValid = validateForm(firstName, lastName, email, password, role);
+            const isValid = validateForm(firstName, lastName, email, password);
             if (!isValid) {
                 console.warn("Form submission blocked due to validation error.");
                 return; // Stop here if validation fails
@@ -114,7 +109,6 @@
                         password: password,
                         firstName: firstName.trim(),
                         lastName: lastName.trim(),
-                        role: role,
                     };
 
                     // Save user data to Firestore
@@ -222,11 +216,6 @@
             <label for="password">Password:</label>
             <input type="password" id="password" name="password" placeholder="Enter your password" required><br>
 
-            <label for="role">Role:</label>
-            <select id="role">
-                <option value="student">Student</option>
-                <option value="teacher">Teacher</option>
-            </select><br>
 
             <button type="submit" id="submit">Register</button><br>
         </form>
