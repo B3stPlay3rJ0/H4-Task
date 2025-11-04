@@ -5,7 +5,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Register</title>
-
     <!-- Firebase SDKs for Modular v9+ -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/9.4.0/firebase-app.js";
@@ -134,33 +133,104 @@
                 });
         });
     </script>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f7fc;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        .form-container {
+            background-color: #fff;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 400px;
+        }
+
+        h1 {
+            text-align: center;
+            color: #4a90e2;
+        }
+
+        label {
+            font-size: 14px;
+            margin-bottom: 5px;
+            display: block;
+            color: #555;
+        }
+
+        input, select {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 20px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 14px;
+        }
+
+        input[type="password"] {
+            font-family: "Arial", sans-serif;
+        }
+
+        button {
+            width: 100%;
+            padding: 12px;
+            background-color: #4a90e2;
+            color: white;
+            font-size: 16px;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        button:hover {
+            background-color: #357ab7;
+        }
+
+        .messageDiv {
+            color: red;
+            font-size: 14px;
+            margin-top: 10px;
+        }
+    </style>
 </head>
 
 <body>
-    <form>
-        <div id="signUpMessage" class="messageDiv" style="display:none;"></div>
+    <div class="form-container">
+        <h1>Register</h1>
+        <form>
+            <div id="signUpMessage" class="messageDiv" style="display:none;"></div>
 
-        <label for="firstName">First Name:</label>
-        <input type="text" id="firstName" name="name" placeholder="Enter your name"><br>
+            <label for="firstName">First Name:</label>
+            <input type="text" id="firstName" name="name" placeholder="Enter your first name" required><br>
 
-        <label for="lastName">Last Name:</label>
-        <input type="text" id="lastName" name="name" placeholder="Enter your name"><br>
+            <label for="lastName">Last Name:</label>
+            <input type="text" id="lastName" name="name" placeholder="Enter your last name" required><br>
 
-        <label for="email">Email:</label>
-        <input type="email" id="email" name="email" placeholder="Enter your email"><br>
+            <label for="email">Email:</label>
+            <input type="email" id="email" name="email" placeholder="Enter your email" required><br>
 
-        <label for="password">Password:</label>
-        <input type="password" id="password" name="password" placeholder="Enter your password"><br>
+            <label for="password">Password:</label>
+            <input type="password" id="password" name="password" placeholder="Enter your password" required><br>
 
-        <label for="role">Role:</label>
-        <select id="role">
-            <option value="student">Student</option>
-            <option value="teacher">Teacher</option>
-        </select><br>
-    </form>
+            <label for="role">Role:</label>
+            <select id="role">
+                <option value="student">Student</option>
+                <option value="teacher">Teacher</option>
+            </select><br>
 
-    <button type="submit" id="submit">Submit</button> <br>
-    <button id="delete">Delete Account</button> <br>
-    <button id="logIn">Login</button>
+            <button type="submit" id="submit">Register</button><br>
+        </form>
+    </div>
 </body>
+
 </html>
